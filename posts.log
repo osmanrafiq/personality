@@ -1,0 +1,2 @@
+/*C12*/SET SCHEMA PUBLIC
+/* PostsDAO.createPostsTable */ create table if not exists posts (party VARCHAR(32) NOT NULL, msg_id VARCHAR(32) NOT NULL, language VARCHAR(2) NOT NULL, created TIMESTAMP NOT NULL, message VARCHAR(10000) NOT NULL, CONSTRAINT pk_Posts PRIMARY KEY (party, msg_id, language))

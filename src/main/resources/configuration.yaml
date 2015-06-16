@@ -1,0 +1,32 @@
+parties: 
+ - sfparti
+ - danskfolkeparti
+ - liberalalliance
+ - socialdemokraterne
+ - venstre.dk
+ - enhedslisten
+ - alternativet.dk
+ - radikalevenstre
+ - Konservative
+ - kristendemokraterneDK
+facebook:
+ accessToken: <Facebook Token here>
+ httpClient:
+  timeout: 5000ms
+translator:
+ clientID: <Azure Client ID here>
+ clientSecret: <Azure Client Sercret here>
+ httpClient:
+  timeout: 30000ms
+watson:
+ serviceURL: https://gateway.watsonplatform.net/personality-insights/api
+ username: <Watson Personality Insights User here>
+ password: <Watson Personality Insights Password here>
+ httpClient:
+  timeout: 30000ms
+database:
+ driverClass: org.hsqldb.jdbcDriver
+ user: sa
+ url: jdbc:hsqldb:file:posts
+ logValidationErrors: true
+ validationQuery: "SELECT 1 FROM INFORMATION_SCHEMA.SYSTEM_USERS"
