@@ -16,6 +16,9 @@ $RECYCLE.BIN/
 
 # Java
 /target
+.classpath
+.project
+/.settings
 
 # Database
 *.lck

@@ -23,7 +23,7 @@ public class UnixTimestampDeserializer extends JsonDeserializer<Date>{
 		try {
 			long unixTime = Long.valueOf(timestamp);
 			date = Date.from(Instant.ofEpochSecond(unixTime));
-			logger.info("Unix Time: " + unixTime + ", converter: " + date);
+			logger.debug("Unix Time: {}, converted:{}", unixTime, date);
         } catch (NumberFormatException e) {
             logger.warn("Unable to deserialize timestamp: " + timestamp, e);
         }

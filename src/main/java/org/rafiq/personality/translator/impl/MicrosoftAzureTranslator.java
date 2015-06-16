@@ -57,7 +57,7 @@ public class MicrosoftAzureTranslator implements Translator{
 
 		MicrosoftAzureAccessToken accessToken = retrieveAccessToken();
 		if (accessToken != null) {
-			logger.info("Translation requested: " + text + ", from: " + fromLanguage + ", to: " + toLanguage);
+			logger.debug("Translation requested: {}, from: {}, to: {}", text, fromLanguage, toLanguage);
 
 			try {
 				UriBuilder builder = UriBuilder.fromUri("http://api.microsofttranslator.com/v2/Http.svc/Translate?text=%22{text}%22&from={from}&to={to}");
@@ -75,11 +75,11 @@ public class MicrosoftAzureTranslator implements Translator{
 					InputStream stream = (InputStream) response.getEntity();
 					xmlResponse = IOUtils.toString(stream, StandardCharsets.UTF_8);
 
-					logger.info("Translation response: " + xmlResponse);
+					logger.debug("Translation response: {}", xmlResponse);
 
 					XPath xPath = XPathFactory.newInstance().newXPath();
 					translation = xPath.evaluate("/", new InputSource(new StringReader(xmlResponse)));
-					logger.info("Translated text: " + translation);
+					logger.debug("Translated text: {}", translation);
 				} else {
 					InputStream stream = (InputStream) response.getEntity();
 					logger.error("Translation failed: " + IOUtils.toString(stream, StandardCharsets.UTF_8));
@@ -107,7 +107,7 @@ public class MicrosoftAzureTranslator implements Translator{
 		try {
 			String tokenRequest = String.format("grant_type=client_credentials&client_id=%s&client_secret=%s&scope=http://api.microsofttranslator.com", codec.encode(clientID), codec.encode(clientSecret), codec.encode("http://api.microsofttranslator.com"));
 
-			logger.info("Requesting new access token: " + tokenRequest);
+			logger.debug("Requesting new access token: {}", tokenRequest);
 			
 			WebTarget target = httpClient.target("https://datamarket.accesscontrol.windows.net/v2/OAuth2-13/");
 			Response httpResponse = target.request().accept(MediaType.APPLICATION_JSON).post(Entity.entity(tokenRequest, Variant.encodings("UTF-8").mediaTypes(MediaType.APPLICATION_FORM_URLENCODED_TYPE).build().get(0)));
@@ -115,7 +115,7 @@ public class MicrosoftAzureTranslator implements Translator{
 			
 			if (httpResponse.getStatus() == Status.OK.getStatusCode()) {
 				accessToken = httpResponse.readEntity(MicrosoftAzureAccessToken.class);
-				logger.info("Azure Access Token Retrieved:\n" + accessToken);
+				logger.debug("Azure Access Token Retrieved: {}", accessToken);
 			} else {
 				InputStream stream = (InputStream) httpResponse.getEntity();
 				logger.error(IOUtils.toString(stream, StandardCharsets.UTF_8));

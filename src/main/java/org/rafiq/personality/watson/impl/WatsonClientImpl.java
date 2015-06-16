@@ -41,7 +41,7 @@ public class WatsonClientImpl implements WatsonClient{
 	
 	@Override
 	public Profile analyze(String party, List<Post> posts) {
-		logger.info("Personality insights requested for: " + party);
+		logger.debug("Personality insights requested for: {}", party);
 
 		List<ContentItem> contentItems =  posts.stream().sequential().map(new Function<Post, ContentItem>() {
 			@Override
@@ -55,7 +55,9 @@ public class WatsonClientImpl implements WatsonClient{
 		
 		Profile profile = null;
 		try {
-			logger.info("Personality insights request: " + new ObjectMapper().writeValueAsString(container));
+			if (logger.isDebugEnabled()) {
+				logger.debug("Personality insights request: " + new ObjectMapper().writeValueAsString(container));
+			}
 
 			UriBuilder builder = UriBuilder.fromUri(serviceURL + "/v2/profile");
 			WebTarget target = httpClient.target(builder);
@@ -65,7 +67,9 @@ public class WatsonClientImpl implements WatsonClient{
 			
 			if (response.getStatus() == Status.OK.getStatusCode()) {
 				profile = response.readEntity(Profile.class);
-				logger.info("Profile analysis complete for: " + party + "\n" + new ObjectMapper().writeValueAsString(profile));
+				if (logger.isDebugEnabled()) {
+					logger.debug("Profile analysis complete for: " + party + "\n" + new ObjectMapper().writeValueAsString(profile));
+				}
 			} else {
 				InputStream stream = (InputStream) response.getEntity();
 				logger.error("Profile analysis failed: " + IOUtils.toString(stream, StandardCharsets.UTF_8));
